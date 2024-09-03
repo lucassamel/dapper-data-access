@@ -23,7 +23,8 @@ class Program
             //OneToOne(connection);
             //OneToMany(connection);
             //QueryMutiple(connection);
-            SelectIn(connection);
+            //SelectIn(connection);
+            Like(connection,".net");
 
             //ListCategories(connection);
         }
@@ -340,6 +341,20 @@ class Program
             Console.WriteLine(item.Title);
         }
 
+    }
+    static void Like(SqlConnection connection, string term)
+    {
+        var query = @"SELECT * FROM [Course] WHERE [Title] LIKE @exp";
+
+        var items = connection.Query<Course>(query, new
+        {
+            exp = $"%{term}%"
+        });
+
+        foreach (var item in items)
+        {
+            Console.WriteLine(item.Title);
+        }
     }
 }
 
