@@ -17,10 +17,10 @@ class Program
             //CreateCategory(connection);
             //DeleteCategory(connection);
             //CreateManyCategories(connection);
-            ExecuteProcedure(connection);
+            //ExecuteProcedure(connection);
+            ExecuteReadProcedure(connection);
 
-
-            ListCategories(connection);
+            //ListCategories(connection);
         }
 
         Console.ReadKey();
@@ -45,7 +45,6 @@ class Program
             Console.WriteLine($"{item.Id} - {item.Title}");
         }
     }
-
     static void CreateCategory(SqlConnection connection)
     {
         var category = new Category
@@ -83,7 +82,6 @@ class Program
 
         Console.WriteLine($"{rows} linhas inseridas ");
     }
-
     static void UpdateCategory(SqlConnection connection)
     {
         var updateQuery = "UPDATE [Category] SET [Title] = @title WHERE [Id] = @id";
@@ -96,7 +94,6 @@ class Program
 
         Console.WriteLine($"{rows} registros atualizadas");
     }
-
     static void DeleteCategory(SqlConnection connection)
     {
         var deleteQuery = "DELETE [Category] WHERE [Id]=@id";
@@ -174,6 +171,20 @@ class Program
             );
 
         Console.WriteLine($"{affectedRows} linhas afetadas");
+    }
+    static void ExecuteReadProcedure(SqlConnection connection)
+    {
+        var procedure = "[spGetCoursesByCategory]";
+        var pars = new { CategoryId = "09ce0b7b-cfca-497b-92c0-3290ad9d5142" };
+        var courses = connection.Query(
+            procedure,
+            pars,
+            commandType: CommandType.StoredProcedure);
+
+        foreach (var item in courses)
+        {
+            Console.WriteLine(item.Title);
+        }
     }
 }
 
