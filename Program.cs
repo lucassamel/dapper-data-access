@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using Dapper;
 using dapper_data_access.Models;
 using Microsoft.Data.SqlClient;
@@ -8,17 +9,16 @@ class Program
     static void Main(string[] args)
     {
         const string connectionString = "Server=localhost,1433;Database=balta;User ID=sa;Password=1q2w3e4r@#$;TrustServerCertificate=True";
-
-        
-        
-
+    
         using ( var connection = new SqlConnection(connectionString))
         {
             //GetCategory(connection);
             // UpdateCategory(connection);
             //CreateCategory(connection);
             //DeleteCategory(connection);
-            CreateManyCategories(connection);
+            //CreateManyCategories(connection);
+            ExecuteProcedure(connection);
+
 
             ListCategories(connection);
         }
@@ -161,6 +161,19 @@ class Program
                 }
             });
         Console.WriteLine($"{rows} linhas inseridas");
+    }
+    static void ExecuteProcedure(SqlConnection connection)
+    {
+        var procedure = "[spDeleteStudent]";
+        var pars = new { StudentId = "f7698225-6fca-482a-9d39-532a3d37ca2b" };
+
+        var affectedRows = connection.Execute( 
+            procedure, 
+            pars, 
+            commandType: CommandType.StoredProcedure 
+            );
+
+        Console.WriteLine($"{affectedRows} linhas afetadas");
     }
 }
 
