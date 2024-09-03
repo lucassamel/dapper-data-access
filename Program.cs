@@ -22,7 +22,8 @@ class Program
             //ReadView(connection);
             //OneToOne(connection);
             //OneToMany(connection);
-            QueryMutiple(connection);
+            //QueryMutiple(connection);
+            SelectIn(connection);
 
             //ListCategories(connection);
         }
@@ -321,6 +322,24 @@ class Program
                 Console.WriteLine(item.Title);
             }
         }
+    }
+    static void SelectIn(SqlConnection connection)
+    {
+        var query = @"select * from Career where [Id] IN @Id";
+
+        var items = connection.Query<Career>(query, new
+        {
+            Id = new[]{
+                    "92d7e864-bea5-4812-80cc-c2f4e94db1af",
+                    "4327ac7e-963b-4893-9f31-9a3b28a4e72b"
+                }
+        });
+
+        foreach (var item in items)
+        {
+            Console.WriteLine(item.Title);
+        }
+
     }
 }
 
